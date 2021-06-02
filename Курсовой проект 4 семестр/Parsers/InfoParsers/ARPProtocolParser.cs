@@ -59,6 +59,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             string targetIPAddress = arpPacket.TargetProtocolAddress.ToString();
             stackPanel.Children.Add(new TextBlock { Text = "Target Protocol Address: " + targetIPAddress });
 
+            ARPExpander.DataContext = arpPacket.Bytes;
             return ARPExpander;
         }
     }

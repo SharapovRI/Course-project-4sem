@@ -81,6 +81,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             catch (IndexOutOfRangeException)
             { }
 
+            DNSExpander.DataContext = dnsPacket;
             return DNSExpander;
         }
     }

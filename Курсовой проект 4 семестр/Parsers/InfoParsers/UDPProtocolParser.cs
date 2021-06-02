@@ -40,6 +40,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
                 stackPanel.Children.Add(new TextBlock { Text = "Urgent Pointer: " + payload });
             }
 
+            udpExpander.DataContext = udpPacket.Bytes;
             return udpExpander;
         }
     }

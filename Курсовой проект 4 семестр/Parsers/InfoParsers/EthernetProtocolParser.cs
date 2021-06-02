@@ -44,8 +44,8 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             string type = ethernet.Type.ToString();
             stackPanel.Children.Add(new TextBlock { Text = "Type: " + type });
 
-            
 
+            ethernetExpander.DataContext = ethernet.Bytes;
             return ethernetExpander;
         }
     }

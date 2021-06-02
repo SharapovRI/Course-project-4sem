@@ -9,22 +9,61 @@
     <Grid Height="auto" Width="auto">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="131*"/>
-            <ColumnDefinition Width="669*"/>
+            <ColumnDefinition Width="215*"/>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="447*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75*"/>
-            <RowDefinition Height="299*"/>
-            <RowDefinition Height="11*"/>
-            <RowDefinition Height="215*"/>
+            <RowDefinition Height="52*"/>
+            <RowDefinition Height="310*"/>
+            <RowDefinition Height="7*"/>
+            <RowDefinition Height="231*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="resumeBut" Content="Resume" Margin="0,10,0,10" Grid.Row="0" Click="Resume_Click" IsEnabled="False" HorizontalAlignment="Center" Width="104"/>
-        <Button x:Name="stopBut" Content="Stop" Margin="18,10,0,10" Click="Stop_Click" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="104"/>
-        <ListView x:Name="listOfPackets" Margin="0,0,0,7" Grid.Row="1" Grid.Column="0" MouseDoubleClick="listOfPackets_MouseDoubleClick" Grid.ColumnSpan="2">
+        <Button x:Name="resumeBut" Content="Resume" Margin="10,10,0,10" Grid.Row="0" Click="Resume_Click" IsEnabled="False" HorizontalAlignment="Left"  Width="104"/>
+        <Button x:Name="stopBut" Content="Stop" Margin="10,10,0,10" Click="Stop_Click" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="104"/>
+        <ListView x:Name="listOfPackets" Margin="0,0,0,7" Grid.Row="1" Grid.Column="0" MouseDoubleClick="listOfPackets_MouseDoubleClick" Grid.ColumnSpan="4">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Path=Protocol}" Value="TcpPacket">
-                            <Setter Property="Background" Value="Purple"/>
+                            <Setter Property="Background" Value="#e7e6ff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="TLS">
+                            <Setter Property="Background" Value="#e7e6ff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="UdpPacket">
+                            <Setter Property="Background" Value="#daeeff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="ArpPacket">
+                            <Setter Property="Background" Value="#faf0d7"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="IcmpV6Packet">
+                            <Setter Property="Background" Value="#fce0ff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="IcmpV4Packet">
+                            <Setter Property="Background" Value="#12272e"/>
+                            <Setter Property="Foreground" Value="#f78787"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="BROWSER">
+                            <Setter Property="Background" Value="#feffd0"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="NBNS">
+                            <Setter Property="Background" Value="#feffd0"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="LLMNR">
+                            <Setter Property="Background" Value="#daeeff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="SSDP">
+                            <Setter Property="Background" Value="#daeeff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="DNS">
+                            <Setter Property="Background" Value="#daeeff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="MDNS">
+                            <Setter Property="Background" Value="#daeeff"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=Protocol}" Value="HTTP">
+                            <Setter Property="Background" Value="#e4ffc7"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -40,8 +79,17 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Grid.ColumnSpan="2"/>
-        <StackPanel x:Name="DetailedFrame" Grid.Row="3" Margin="0,0,0,10" Grid.ColumnSpan="2"/>
-
+        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Grid.ColumnSpan="4"/>
+        <Grid Grid.ColumnSpan="4" Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="385*"/>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="407*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="DetailedFrame"/>
+            <GridSplitter Width="8"
+        HorizontalAlignment="Center" Grid.Column="1" Margin="0,10,0,-10" />
+            <TextBlock x:Name="TBBytes" Grid.Column="2" FontSize="14"/>
+        </Grid>
     </Grid>
 </UserControl>

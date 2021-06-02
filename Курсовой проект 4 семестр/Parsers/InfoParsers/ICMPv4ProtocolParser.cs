@@ -30,6 +30,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             string checkSum = Convert.ToString(icmpPacket.Checksum, 16);
             stackPanel.Children.Add(new TextBlock { Text = "CheckSum: 0x" + checkSum });
 
+            icmpv4Expander.DataContext = icmpPacket.Bytes;
             return icmpv4Expander;
         }
     }

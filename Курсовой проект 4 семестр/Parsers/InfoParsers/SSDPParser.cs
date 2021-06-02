@@ -45,6 +45,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             catch (IndexOutOfRangeException)
             { }
 
+            SSDPExpander.DataContext = ssdpPacket;
             return SSDPExpander;
         }
 

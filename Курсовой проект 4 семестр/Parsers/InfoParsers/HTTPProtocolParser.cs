@@ -105,6 +105,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             catch (IndexOutOfRangeException)
             { }
 
+            HTTPExpander.DataContext = tcpPacket.PayloadData;
             return HTTPExpander;
         }
     }

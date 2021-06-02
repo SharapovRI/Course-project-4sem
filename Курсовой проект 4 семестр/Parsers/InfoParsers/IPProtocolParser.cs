@@ -63,6 +63,8 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             }
             catch (IndexOutOfRangeException)
             { }
+
+            ipExpander.DataContext = pPacket.Bytes;
             return ipExpander;
         }
     }

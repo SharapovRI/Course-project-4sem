@@ -34,6 +34,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             string len = igmpPacket.MaxResponseTime.ToString();
             stackPanel.Children.Add(new TextBlock { Text = "Max Response Time: " + len });
 
+            igmpExpander.DataContext = igmpPacket.Bytes;
             return igmpExpander;
         }
     }

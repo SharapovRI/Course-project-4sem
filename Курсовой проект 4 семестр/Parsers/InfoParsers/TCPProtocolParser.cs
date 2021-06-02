@@ -46,7 +46,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             string urgentPointer = tcpPacket.UrgentPointer.ToString();
             stackPanel.Children.Add(new TextBlock { Text = "Urgent Pointer: " + urgentPointer });
 
-
+            tcpExpander.DataContext = tcpPacket.Bytes;
             return tcpExpander;
         }
     }

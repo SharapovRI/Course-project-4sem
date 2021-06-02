@@ -46,6 +46,10 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             string capturedLength = packet.Length.ToString();
             stackPanel.Children.Add(new TextBlock { Text = "Captured Length: " + capturedLength });
 
+            if (packet.CaptureEvent.Packet.Data != null)
+            {
+                frameExpander.DataContext = packet.CaptureEvent.Packet.Data;
+            }
             return frameExpander;
         }
     }

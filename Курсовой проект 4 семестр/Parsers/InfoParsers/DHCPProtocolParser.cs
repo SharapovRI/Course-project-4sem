@@ -60,8 +60,8 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
 
             string xid = dhcpPacket.Xid.ToString();
             stackPanel.Children.Add(new TextBlock { Text = "Xid: " + xid });
-                       
 
+            dhcpExpander.DataContext = dhcpPacket.Bytes;
             return dhcpExpander;
         }
     }

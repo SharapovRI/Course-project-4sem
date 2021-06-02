@@ -53,7 +53,15 @@ namespace Курсовой_проект_4_семестр.Pages
         {
             MainWindow.Dispatcher.Invoke(() =>
                  {
-                     var packet = PacketParser.ParsePacket(e, ID++, device.MacAddress.ToString());
+                     DisplayedPacket packet;
+                     if (device.MacAddress != null)
+                     {
+                         packet = PacketParser.ParsePacket(e, ID++, device.MacAddress.ToString());
+                     }
+                     else
+                     {
+                         packet = PacketParser.ParsePacket(e, ID++);
+                     }
                      if (packet != null)
                      {
                          listOfPackets.Items.Add(packet);
@@ -82,6 +90,8 @@ namespace Курсовой_проект_4_семестр.Pages
             if (frameExpander != null)
             {
                 frameExpander.Header = "Frame " + packet.Number;
+                frameExpander.FontSize = 14;
+                frameExpander.MouseDown += Expander_MouseDown;
                 DetailedFrame.Children.Add(frameExpander);
             }
 
@@ -90,13 +100,40 @@ namespace Курсовой_проект_4_семестр.Pages
 
             foreach (var protocol in namesOfProtocols)
             {
-                Expander Expander = ProtocolParser.ParseProtocol(packet, protocol);
-                if (Expander != null)
+                Expander expander = ProtocolParser.ParseProtocol(packet, protocol);
+                if (expander != null)
                 {
-                    Expander.Header = protocol + ": ";
-                    DetailedFrame.Children.Add(Expander);
+                    expander.Header = protocol + ": ";
+                    expander.FontSize = 14;
+                    expander.MouseDown += Expander_MouseDown;
+                    DetailedFrame.Children.Add(expander);
                 }
             }
+        }
+
+        private void Expander_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Expander expander = sender as Expander;
+            byte[] bytes = (byte[])expander.DataContext;
+            if (bytes == null) return;
+
+            string str = "";
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                string tecByte = Convert.ToString(bytes[i], 16);
+                if (tecByte.Length < 2) tecByte = "0" + tecByte;
+                str += tecByte + " ";
+                if ((i + 1) % 8 == 0)
+                {
+                    str += "\t";
+                }
+                if ((i + 1) % 32 == 0)
+                {
+                    str += "\n";
+                }
+            }
+
+            TBBytes.Text = str;
         }
 
         private void Resume_Click(object sender, RoutedEventArgs e)

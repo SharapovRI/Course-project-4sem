@@ -83,7 +83,7 @@ namespace Курсовой_проект_4_семестр.Parsers
 
             return listOFPackets;
         }
-        public static DisplayedPacket ParsePacket(CaptureEventArgs capturedData, int id, string macAddress)
+        public static DisplayedPacket ParsePacket(CaptureEventArgs capturedData, int id, string macAddress = "")
         {
             MacAddress = macAddress;
             Packet allPackets = capturedData.Packet.GetPacket();

@@ -55,6 +55,8 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             }
             catch (IndexOutOfRangeException)
             { }
+
+            icmpv6Expander.DataContext = icmpPacket.Bytes;
             return icmpv6Expander;
         }
     }
