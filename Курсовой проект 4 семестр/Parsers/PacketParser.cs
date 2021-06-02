@@ -13,8 +13,79 @@ namespace Курсовой_проект_4_семестр.Parsers
 {
     public class PacketParser
     {
-        public static DisplayedPacket ParsePacket(CaptureEventArgs capturedData, int id)
+        private static string MacAddress = "";
+        public static List<string> GetListOfProtocols(DisplayedPacket displayedPacket)
         {
+            List<string> listOFPackets = new List<string>();
+
+            Packet packet = displayedPacket.Packet;
+            if (packet is null) return null;
+
+            if (packet.HasPayloadPacket)
+            {
+                listOFPackets.Add(packet.GetType().Name);
+                do
+                {
+                    packet = packet.PayloadPacket;
+                    listOFPackets.Add(packet.GetType().Name);
+                }
+                while (packet.HasPayloadPacket);
+            }
+
+            switch (displayedPacket.Protocol)
+            {
+                case "TLS":
+                    {
+                        listOFPackets.Add("Transport Layer Security");
+                        break;
+                    }
+                case "BROWSER":
+                    {
+                        listOFPackets.Add("NetBIOS Datagram Service");
+                        listOFPackets.Add("SMB (Server Message Block Protocol");
+                        listOFPackets.Add("SMB MailSlot Protocol");
+                        listOFPackets.Add("Microsoft Windows Browser Protocol");
+                        break;
+                    }
+                case "DNS":
+                    {
+                        listOFPackets.Add("Domain Name System");
+                        break;
+                    }
+                case "MDNS":
+                    {
+                        listOFPackets.Add("Multicast Domain Name System");
+                        break;
+                    }
+                case "LLMNR":
+                    {
+                        listOFPackets.Add("Link-local Multicast Name Resolution");
+                        break;
+                    }
+                case "NBNS":
+                    {
+                        listOFPackets.Add("NetBIOS Name Service");
+                        break;
+                    }
+                case "SSDP":
+                    {
+                        listOFPackets.Add("Simple Service Discovery Protocol");
+                        break;
+                    }
+                case "HTTP":
+                    {
+                        listOFPackets.Add("Hypertext Transfer Protocol");
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            return listOFPackets;
+        }
+        public static DisplayedPacket ParsePacket(CaptureEventArgs capturedData, int id, string macAddress)
+        {
+            MacAddress = macAddress;
             Packet allPackets = capturedData.Packet.GetPacket();
             EthernetPacket ethernet = allPackets.Extract<EthernetPacket>();
             if (allPackets is null) return null;
@@ -69,10 +140,11 @@ namespace Курсовой_проект_4_семестр.Parsers
             if (packet.GetType().Name == "TcpPacket")
             {
                 TcpPacket tcpPacket = (TcpPacket)packet;
+                if (CheckHTTP(tcpPacket)) return "HTTP";
                 int preflags = int.Parse(Convert.ToString(tcpPacket.Flags, 2));
                 int flags = preflags;
                 if (flags / 1000 % 100 == 11 && tcpPacket.HasPayloadData)
-                {                    
+                {
                     return "TLS";
                 }
             }
@@ -83,10 +155,12 @@ namespace Курсовой_проект_4_семестр.Parsers
                 if (ethernet != null)
                 {
                     if (CheckMDNS(ethernet)) return "MDNS";
+                    if (CheckDNS(ethernet)) return "DNS";
                     if (CheckNBNS(ethernet)) return "NBNS";
                     if (CheckLLMNR(ethernet)) return "LLMNR";
                     if (CheckSSDP(ethernet)) return "SSDP";
                     if (CheckBROWSER(ethernet)) return "BROWSER";
+                    if (CheckHTTP(ethernet)) return "HTTP";
                 }
             }
 
@@ -95,28 +169,20 @@ namespace Курсовой_проект_4_семестр.Parsers
 
         private static bool CheckMDNS(EthernetPacket ethernet)
         {
-            PhysicalAddress source = ethernet.SourceHardwareAddress;
-            PhysicalAddress dest = ethernet.DestinationHardwareAddress;
+            UdpPacket udpPacket = ethernet.Extract<UdpPacket>();
 
-            /*byte[] sourceAddress = source.GetAddressBytes();
-            if (sourceAddress[0] != 116 || sourceAddress[1] != 229 || sourceAddress[2] != 11 || sourceAddress[3] != 227 || sourceAddress[4] != 5 || sourceAddress[5] != 38)
-            {
-                return false;
-            }*/
+            if (udpPacket.DestinationPort == 5353 || udpPacket.SourcePort == 5353) return true;
 
-            if (source.ToString() != "74E50BE30526")
-            {
-                return false;
-            }
+            return false;
+        }
 
+        private static bool CheckDNS(EthernetPacket ethernet)
+        {
+            UdpPacket udpPacket = ethernet.Extract<UdpPacket>();
 
-            byte[] destAddress = dest.GetAddressBytes();
-            if (destAddress[3] != 00 || destAddress[4] != 00 || destAddress[5] != 251)
-            {
-                return false;
-            }
+            if (udpPacket.DestinationPort == 53 || udpPacket.SourcePort == 53) return true;
 
-            return true;
+            return false;
         }
 
         private static bool CheckSSDP(EthernetPacket ethernet)
@@ -124,13 +190,7 @@ namespace Курсовой_проект_4_семестр.Parsers
             PhysicalAddress source = ethernet.SourceHardwareAddress;
             PhysicalAddress dest = ethernet.DestinationHardwareAddress;
 
-            /*byte[] sourceAddress = source.GetAddressBytes();
-            if (sourceAddress[0] != 116 || sourceAddress[1] != 229 || sourceAddress[2] != 11 || sourceAddress[3] != 227 || sourceAddress[4] != 5 || sourceAddress[5] != 38)
-            {
-                return false;
-            }*/
-
-            if (source.ToString() != "74E50BE30526")
+            if (source.ToString() != MacAddress)
             {
                 return false;
             }
@@ -149,13 +209,7 @@ namespace Курсовой_проект_4_семестр.Parsers
             PhysicalAddress source = ethernet.SourceHardwareAddress;
             PhysicalAddress dest = ethernet.DestinationHardwareAddress;
 
-            /*byte[] sourceAddress = source.GetAddressBytes();
-            if (sourceAddress[0] != 116 || sourceAddress[1] != 229 || sourceAddress[2] != 11 || sourceAddress[3] != 227 || sourceAddress[4] != 5 || sourceAddress[5] != 38)
-            {
-                return false;
-            }*/
-
-            if (source.ToString() != "74E50BE30526")
+            if (source.ToString() != MacAddress)
             {
                 return false;
             }
@@ -178,16 +232,10 @@ namespace Курсовой_проект_4_семестр.Parsers
 
         private static bool CheckBROWSER(EthernetPacket ethernet)
         {
-            PhysicalAddress source = ethernet.SourceHardwareAddress;
+            /*PhysicalAddress source = ethernet.SourceHardwareAddress;
             PhysicalAddress dest = ethernet.DestinationHardwareAddress;
 
-            /*byte[] sourceAddress = source.GetAddressBytes();
-            if (sourceAddress[0] != 116 || sourceAddress[1] != 229 || sourceAddress[2] != 11 || sourceAddress[3] != 227 || sourceAddress[4] != 5 || sourceAddress[5] != 38)
-            {
-                return false;
-            }*/
-
-            if (source.ToString() != "74E50BE30526")
+            if (source.ToString() != MacAddress)
             {
                 return false;
             }
@@ -196,11 +244,11 @@ namespace Курсовой_проект_4_семестр.Parsers
             if (dest.ToString() != "FFFFFFFFFFFF")
             {
                 return false;
-            }
+            }*/
 
             UdpPacket udpPacket = (UdpPacket)GetLastPacket(ethernet);
 
-            if (udpPacket.DestinationPort != 138)
+            if (udpPacket.DestinationPort != 138 || udpPacket.SourcePort != 138)
             {
                 return false;
             }
@@ -212,14 +260,8 @@ namespace Курсовой_проект_4_семестр.Parsers
         {
             PhysicalAddress source = ethernet.SourceHardwareAddress;
             PhysicalAddress dest = ethernet.DestinationHardwareAddress;
-
-            /*byte[] sourceAddress = source.GetAddressBytes();
-            if (sourceAddress[0] != 116 || sourceAddress[1] != 229 || sourceAddress[2] != 11 || sourceAddress[3] != 227 || sourceAddress[4] != 5 || sourceAddress[5] != 38)
-            {
-                return false;
-            }*/
-
-            if (source.ToString() != "74E50BE30526")
+            
+            if (source.ToString() != MacAddress)
             {
                 return false;
             }
@@ -232,5 +274,20 @@ namespace Курсовой_проект_4_семестр.Parsers
 
             return true;
         }
+
+        private static bool CheckHTTP(TcpPacket tcpPacket)
+        {
+            if (tcpPacket.DestinationPort == 80 || tcpPacket.SourcePort == 80) return true;
+
+            return false;
+        }
+
+        private static bool CheckHTTP(EthernetPacket ethernet)
+        {
+            UdpPacket udpPacket = ethernet.Extract<UdpPacket>();
+            if (udpPacket.DestinationPort == 80 || udpPacket.SourcePort == 80) return true;
+
+            return false;
+        }        
     }
 }
