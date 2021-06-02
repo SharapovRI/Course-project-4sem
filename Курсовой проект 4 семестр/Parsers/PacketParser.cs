@@ -16,6 +16,7 @@ namespace Курсовой_проект_4_семестр.Parsers
         private static string MacAddress = "";
         public static List<string> GetListOfProtocols(DisplayedPacket displayedPacket)
         {
+            if (displayedPacket is null) return null;
             List<string> listOFPackets = new List<string>();
 
             Packet packet = displayedPacket.Packet;

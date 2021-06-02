@@ -8,7 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="tiger_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="SharpPcap" Version="5.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="tiger_icon.png" />
   </ItemGroup>
 
 </Project>

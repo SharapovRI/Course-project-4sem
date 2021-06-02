@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Width="auto" Height="auto" >
     <Grid>
-        <ListView x:Name="listOfDevices" Margin="61,50,87,87" MouseDoubleClick="listOfDevices_MouseDoubleClick"/>
+        <ListView x:Name="listOfDevices" Margin="61,50,87,87" MouseDoubleClick="listOfDevices_MouseDoubleClick" FontSize="16"/>
 
     </Grid>
 </UserControl>

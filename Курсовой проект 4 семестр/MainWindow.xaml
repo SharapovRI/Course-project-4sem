@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Курсовой_проект_4_семестр"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        WindowState="Maximized" Icon="tiger_icon.png">
     <Grid>
         <ContentControl x:Name="MainControler" Content="ContentControl" Margin="10,58,10,10"/>
 

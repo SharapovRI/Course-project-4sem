@@ -5,23 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Курсовой_проект_4_семестр.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800" Width="Auto" Height="Auto">
+             d:DesignHeight="600" d:DesignWidth="800" Width="Auto" Height="Auto"
+             >
     <Grid Height="auto" Width="auto">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="131*"/>
-            <ColumnDefinition Width="215*"/>
-            <ColumnDefinition Width="7*"/>
-            <ColumnDefinition Width="447*"/>
+            <ColumnDefinition Width="114*"/>
+            <ColumnDefinition Width="9*"/>
+            <ColumnDefinition Width="114*"/>
+            <ColumnDefinition Width="458*"/>
+            <ColumnDefinition Width="114*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="52*"/>
+            <RowDefinition Height="43*"/>
+            <RowDefinition Height="9*"/>
             <RowDefinition Height="310*"/>
             <RowDefinition Height="7*"/>
             <RowDefinition Height="231*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="resumeBut" Content="Resume" Margin="10,10,0,10" Grid.Row="0" Click="Resume_Click" IsEnabled="False" HorizontalAlignment="Left"  Width="104"/>
-        <Button x:Name="stopBut" Content="Stop" Margin="10,10,0,10" Click="Stop_Click" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Width="104"/>
-        <ListView x:Name="listOfPackets" Margin="0,0,0,7" Grid.Row="1" Grid.Column="0" MouseDoubleClick="listOfPackets_MouseDoubleClick" Grid.ColumnSpan="4">
+        <Button x:Name="resumeBut" Content="Resume" Click="Resume_Click" IsEnabled="False" HorizontalAlignment="Center"  Width="114" Height="42" VerticalAlignment="Center"/>
+        <Button x:Name="stopBut" Content="Stop" Click="Stop_Click" HorizontalAlignment="Center" Width="112" Height="42" VerticalAlignment="Center" Grid.Column="2"/>
+        <ListView x:Name="listOfPackets" Margin="0,0,0,7" Grid.Row="2" Grid.Column="0" MouseDoubleClick="listOfPackets_MouseDoubleClick" Grid.ColumnSpan="5" GridViewColumnHeader.Click="ListViewColumnHeaderClick">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Style.Triggers>
@@ -70,17 +73,17 @@
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Number}" Width="50">№</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Time}" Width="100">Time</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Source}" Width="150">Source</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Destination}" Width="150">Destination</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Protocol}" Width="100">Protocol</GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Length}" Width="100">Length</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Number}" x:Name="Number" Width="50">№</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Time}" x:Name="Time" Width="100">Time</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Source}" x:Name="Source" Width="150">Source</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Destination}" x:Name="Destination" Width="150">Destination</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Protocol}" x:Name="Protocol" Width="100">Protocol</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Length}" x:Name="Length" Width="100">Length</GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch" Grid.ColumnSpan="4"/>
-        <Grid Grid.ColumnSpan="4" Grid.Row="3">
+        <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch" Grid.ColumnSpan="5"/>
+        <Grid Grid.ColumnSpan="5" Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="385*"/>
                 <ColumnDefinition Width="8*"/>
@@ -89,7 +92,8 @@
             <StackPanel x:Name="DetailedFrame"/>
             <GridSplitter Width="8"
         HorizontalAlignment="Center" Grid.Column="1" Margin="0,10,0,-10" />
-            <TextBlock x:Name="TBBytes" Grid.Column="2" FontSize="14"/>
+            <TextBox x:Name="TBBytes" Grid.Column="2" FontSize="14" IsReadOnly="True"/>
         </Grid>
+        <Button x:Name="Back" Content="Back" IsEnabled="False" Grid.Column="4" Click="Back_Click" Height="42" VerticalAlignment="Center" HorizontalAlignment="Center" Width="112"/>
     </Grid>
 </UserControl>

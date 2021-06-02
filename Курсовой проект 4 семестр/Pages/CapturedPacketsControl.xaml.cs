@@ -2,6 +2,7 @@
 using SharpPcap;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace Курсовой_проект_4_семестр.Pages
             this.device = device;
             MainWindow = mainWindow;
             InitializeComponent();
-           //DisplayPackets();
+            //DisplayPackets();
         }
 
         public void DisplayPackets()
@@ -79,6 +80,9 @@ namespace Курсовой_проект_4_семестр.Pages
             
             resumeBut.IsEnabled = true;
             stopBut.IsEnabled = false;
+            Back.IsEnabled = true;
+
+            listOfPackets.Items.SortDescriptions.Add(new SortDescription("Protocol", ListSortDirection.Ascending));
         }
 
         private void listOfPackets_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -97,7 +101,7 @@ namespace Курсовой_проект_4_семестр.Pages
 
 
             List<string> namesOfProtocols = PacketParser.GetListOfProtocols(packet);
-
+            if (namesOfProtocols is null) return;
             foreach (var protocol in namesOfProtocols)
             {
                 Expander expander = ProtocolParser.ParseProtocol(packet, protocol);
@@ -140,6 +144,7 @@ namespace Курсовой_проект_4_семестр.Pages
         {
             resumeBut.IsEnabled = false;
             stopBut.IsEnabled = true;
+            Back.IsEnabled = false;
 
             device.OnPacketArrival += new PacketArrivalEventHandler(Device_OnPacketArrival);
             // Open the device for capturing
@@ -149,5 +154,53 @@ namespace Курсовой_проект_4_семестр.Pages
             // Start the capturing process
             device.StartCapture();
         }
+
+        private void Back_Click(object sender, RoutedEventArgs e)
+        {
+            MainControl mainControl = new MainControl(MainWindow);
+            MainWindow.MainControler.Content = mainControl;
+        }
+
+
+
+        GridViewColumnHeader _lastHeaderClicked = null;
+        bool isAscending = false;
+        private void ListViewColumnHeaderClick(object sender, RoutedEventArgs e)
+        {
+            GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;
+
+            if (headerClicked == null)
+                return;
+
+            if (headerClicked.Role == GridViewColumnHeaderRole.Padding)
+                return;
+
+            var sortingColumn = (headerClicked.Column.DisplayMemberBinding as Binding)?.Path?.Path;
+            if (sortingColumn == null)
+                return;
+
+            if (_lastHeaderClicked == headerClicked)
+            {
+                if (isAscending)
+                {
+                    listOfPackets.Items.SortDescriptions.Clear();
+                    listOfPackets.Items.SortDescriptions.Add(new SortDescription(sortingColumn, ListSortDirection.Descending));
+                    isAscending = false;
+                }
+                else
+                {
+                    listOfPackets.Items.SortDescriptions.Clear();
+                    listOfPackets.Items.SortDescriptions.Add(new SortDescription(sortingColumn, ListSortDirection.Ascending));
+                    isAscending = true;
+                }
+                return;
+            }
+
+            _lastHeaderClicked = headerClicked;
+            isAscending = true;
+            listOfPackets.Items.SortDescriptions.Clear();
+            listOfPackets.Items.SortDescriptions.Add(new SortDescription(sortingColumn, ListSortDirection.Ascending));
+        }
+        
     }
 }
