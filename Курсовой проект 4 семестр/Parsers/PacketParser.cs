@@ -232,20 +232,7 @@ namespace Курсовой_проект_4_семестр.Parsers
         }
 
         private static bool CheckBROWSER(EthernetPacket ethernet)
-        {
-            /*PhysicalAddress source = ethernet.SourceHardwareAddress;
-            PhysicalAddress dest = ethernet.DestinationHardwareAddress;
-
-            if (source.ToString() != MacAddress)
-            {
-                return false;
-            }
-
-
-            if (dest.ToString() != "FFFFFFFFFFFF")
-            {
-                return false;
-            }*/
+        {           
 
             UdpPacket udpPacket = (UdpPacket)GetLastPacket(ethernet);
 
@@ -278,6 +265,7 @@ namespace Курсовой_проект_4_семестр.Parsers
 
         private static bool CheckHTTP(TcpPacket tcpPacket)
         {
+            if (tcpPacket.PayloadData.Length == 0) return false;
             if (tcpPacket.DestinationPort == 80 || tcpPacket.SourcePort == 80) return true;
 
             return false;
@@ -286,6 +274,7 @@ namespace Курсовой_проект_4_семестр.Parsers
         private static bool CheckHTTP(EthernetPacket ethernet)
         {
             UdpPacket udpPacket = ethernet.Extract<UdpPacket>();
+            if (udpPacket.PayloadData.Length == 0) return false;
             if (udpPacket.DestinationPort == 80 || udpPacket.SourcePort == 80) return true;
 
             return false;

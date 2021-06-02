@@ -19,9 +19,19 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
             StackPanel stackPanel = new StackPanel();
             HTTPExpander.Content = stackPanel;
 
+            byte[] httpPacket = null;
+            UdpPacket udpPacket;
             TcpPacket tcpPacket = packet.Packet.Extract<TcpPacket>();
-            if (tcpPacket is null) return null;
-            byte[] httpPacket = tcpPacket.PayloadData;
+            if (tcpPacket is null)
+            {
+                udpPacket = packet.Packet.Extract<UdpPacket>();
+                if (tcpPacket is null) return null;
+                httpPacket = udpPacket.PayloadData;
+            }
+            else
+            {
+                httpPacket = tcpPacket.PayloadData;
+            }
             if (httpPacket is null) return null;
 
             try
@@ -60,7 +70,7 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
                     stackPanel.Children.Add(new TextBlock { Text = "Accept: " + accert });
 
                     httpPacket = httpPacket[(accertBytes.Length + 2)..];
-                    
+
                     while (httpPacket.Length > 4)
                     {
                         byte[] IMS = httpPacket.TakeWhile(e => e != 13).ToArray();
