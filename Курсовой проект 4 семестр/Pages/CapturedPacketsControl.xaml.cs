@@ -81,8 +81,6 @@ namespace Курсовой_проект_4_семестр.Pages
             resumeBut.IsEnabled = true;
             stopBut.IsEnabled = false;
             Back.IsEnabled = true;
-
-            listOfPackets.Items.SortDescriptions.Add(new SortDescription("Protocol", ListSortDirection.Ascending));
         }
 
         private void listOfPackets_MouseDoubleClick(object sender, MouseButtonEventArgs e)

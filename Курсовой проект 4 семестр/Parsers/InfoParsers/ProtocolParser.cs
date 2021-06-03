@@ -65,9 +65,13 @@ namespace Курсовой_проект_4_семестр.Parsers.InfoParsers
                     {
                         return HTTPProtocolParser.GetHTTPInfo(packet);
                     }
-                case "IgmpPacket":
+                case "IgmpV2Packet":
                     {
                         return IGMPProtocolParser.GetIGMPProtocolInfo(packet);
+                    }
+                case "DhcpV4Packet":
+                    {
+                        return DHCPProtocolParser.GetDHCProtocolInfo(packet);
                     }
                 default:
                     {
